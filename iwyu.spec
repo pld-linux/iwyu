@@ -15,6 +15,7 @@ URL:		https://github.com/include-what-you-use/include-what-you-use
 BuildRequires:	clang-devel >= %{llvm_ver}
 BuildRequires:	cmake >= 3.20.0
 BuildRequires:	llvm-devel >= %{llvm_ver}
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
