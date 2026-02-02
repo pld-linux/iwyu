@@ -1,16 +1,16 @@
-%define	llvm_ver	20
+%define	llvm_ver	21
 
 Summary:	Include What You Use - tool for use with clang to analyze includes in C and C++ source files
 Summary(pl.UTF-8):	Include What You Use - narzędzie dla clanga do analizy plików włączanych przez pliki źródłowe w C i C++
 Name:		iwyu
 # 0.21.x for llvm 17, 0.22.x for llvm 18 etc.
-Version:	0.24
+Version:	0.25
 Release:	1
 License:	LLVM (BSD-like)
 Group:		Development/Tools
 #Source0Download: https://github.com/include-what-you-use/include-what-you-use/releases
 Source0:	https://github.com/include-what-you-use/include-what-you-use/archive/%{version}/include-what-you-use-%{version}.tar.gz
-# Source0-md5:	5275723589b76074307e34b1e982f7ec
+# Source0-md5:	91122441a3fbd8194a925c8b2a0bcc9d
 URL:		https://github.com/include-what-you-use/include-what-you-use
 BuildRequires:	clang-devel >= %{llvm_ver}
 BuildRequires:	cmake >= 3.20.0
