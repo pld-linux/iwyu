@@ -5,7 +5,7 @@ Summary(pl.UTF-8):	Include What You Use - narzÄ™dzie dla clanga do analizy plikÃ
 Name:		iwyu
 # 0.21.x for llvm 17, 0.22.x for llvm 18 etc.
 Version:	0.25
-Release:	1
+Release:	2
 License:	LLVM (BSD-like)
 Group:		Development/Tools
 #Source0Download: https://github.com/include-what-you-use/include-what-you-use/releases
