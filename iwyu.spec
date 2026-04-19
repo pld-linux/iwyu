@@ -5,15 +5,18 @@ Summary(pl.UTF-8):	Include What You Use - narzÄ™dzie dla clanga do analizy plikÃ
 Name:		iwyu
 # 0.21.x for llvm 17, 0.22.x for llvm 18 etc.
 Version:	0.26
-Release:	1
+Release:	2
 License:	LLVM (BSD-like)
 Group:		Development/Tools
 #Source0Download: https://github.com/include-what-you-use/include-what-you-use/releases
 Source0:	https://github.com/include-what-you-use/include-what-you-use/archive/%{version}/include-what-you-use-%{version}.tar.gz
 # Source0-md5:	75cba17d42417d91c53edbad2de1f37d
+Patch0:		fix-libraries.patch
+Patch1:		packaged-gtest.patch
 URL:		https://github.com/include-what-you-use/include-what-you-use
 BuildRequires:	clang-devel >= %{llvm_ver}
 BuildRequires:	cmake >= 3.20.0
+BuildRequires:	gtest-devel
 BuildRequires:	llvm-devel >= %{llvm_ver}
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -37,11 +40,14 @@ wymagania.
 
 %prep
 %setup -q -n include-what-you-use-%{version}
+%patch -P0 -p1
+%patch -P1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3,%{__python3},' fix_includes.py iwyu_tool.py
 
 %build
-%cmake -B build
+%cmake -B build \
+	-DIWYU_USE_SYSTEM_GTEST:BOOL=ON
 
 %{__make} -C build
 

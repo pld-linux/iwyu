@@ -1,0 +1,60 @@
+From 816b81ce2129f5fe60b06261a166a05a3d22af27 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Kim=20Gr=C3=A4sman?= <kim.grasman@gmail.com>
+Date: Sat, 28 Mar 2026 14:15:04 +0100
+Subject: [PATCH] [cmake] Use vanilla add_library for static libraries
+
+The add_llvm_library macro has a lot of customization and
+parameterization to fit libraries into the LLVM conventions.
+
+Unfortunately the macro forces libraries to be built as SHARED if the
+BUILD_SHARED_LIBS option is on, no matter if we explicitly specify
+STATIC. This in turn led to packaging failures, because the shared
+libraries were not installed.
+
+Switch to using vanilla add_library, and make the libraries OBJECT
+libraries, which is the cheapest kind (we have no use for proper static
+libraries either). Use the llvm_update_compile_flags functions to make
+exception and RTTI flags consistent with LLVM.
+
+This reverts b828e17 and also e9a08a9, which is no longer necessary.
+
+Fixes #1961.
+---
+ CMakeLists.txt | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6f59e476b..422c21ff2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -135,7 +135,8 @@ set(LLVM_LINK_COMPONENTS
+   AllTargetsInfos
+ )
+ 
+-add_llvm_library(iwyu BUILDTREE_ONLY
++add_library(iwyu
++  OBJECT
+   iwyu.cc
+   iwyu_ast_util.cc
+   iwyu_cache.cc
+@@ -152,6 +153,7 @@ add_llvm_library(iwyu BUILDTREE_ONLY
+   iwyu_regex.cc
+   iwyu_verrs.cc
+ )
++llvm_update_compile_flags(iwyu)
+ 
+ add_llvm_executable(include-what-you-use
+   iwyu_main.cc
+@@ -233,9 +235,11 @@ if (WIN32)
+ endif()
+ 
+ # Build vendored gtest library
+-add_llvm_library(iwyu-gtest BUILDTREE_ONLY
++add_library(iwyu-gtest
++  OBJECT
+   vendor/googletest/src/gtest-all.cc
+ )
++llvm_update_compile_flags(iwyu-gtest)
+ 
+ target_include_directories(iwyu-gtest
+   PUBLIC
